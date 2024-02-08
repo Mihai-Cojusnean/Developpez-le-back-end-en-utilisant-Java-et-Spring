@@ -29,8 +29,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .name(user.getName())
-                .createdAt(user.getCreated_at())
-                .updatedAt(user.getUpdated_at())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }

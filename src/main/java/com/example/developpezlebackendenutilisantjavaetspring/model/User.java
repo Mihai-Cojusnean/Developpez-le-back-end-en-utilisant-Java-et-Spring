@@ -21,22 +21,22 @@ public class User {
     String email;
     String name;
     String password;
-    LocalDateTime created_at;
-    LocalDateTime updated_at;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 
-    public User(Integer id, String email, String name, LocalDateTime created_at, LocalDateTime updated_at) {
+    public User(Integer id, String email, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
         this.name = name;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public User(String email, String name, String password, LocalDateTime created_at, LocalDateTime updated_at) {
+    public User(String email, String name, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.name = name;
         this.password = password;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
