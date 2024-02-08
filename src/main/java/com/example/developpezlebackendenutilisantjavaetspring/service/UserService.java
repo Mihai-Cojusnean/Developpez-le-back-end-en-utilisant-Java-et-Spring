@@ -29,10 +29,6 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public User findByEmail(String email) {
-        return userRepo.findByEmail(email).orElse(new User());
-    }
-
     public boolean existsByEmail(String email) {
         return userRepo.existsByEmail(email);
     }
