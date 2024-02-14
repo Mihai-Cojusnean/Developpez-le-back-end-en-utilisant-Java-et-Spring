@@ -1,10 +1,14 @@
-package com.example.developpezlebackendenutilisantjavaetspring.model;
+package com.example.developpezlebackendenutilisantjavaetspring.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -17,23 +21,21 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    Integer user_id;
-    Integer rental_id;
-    String message;
-    LocalDateTime created_at;
-    LocalDateTime updated_at;
 
-    public Message(Integer user_id,
-                   Integer rental_id,
-                   String message,
-                   LocalDateTime created_at,
-                   LocalDateTime updated_at) {
-        this.user_id = user_id;
-        this.rental_id = rental_id;
-        this.message = message;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
+    @NotNull
+    Integer user_id;
+
+    @NotNull
+    Integer rental_id;
+
+    @NotEmpty
+    String message;
+
+    @CreationTimestamp
+    LocalDateTime created_at;
+
+    @UpdateTimestamp
+    LocalDateTime updated_at;
 
     public Message(String message) {
         this.message = message;

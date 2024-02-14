@@ -1,7 +1,7 @@
 package com.example.developpezlebackendenutilisantjavaetspring.security;
 
-import com.example.developpezlebackendenutilisantjavaetspring.model.User;
-import com.example.developpezlebackendenutilisantjavaetspring.repository.UserRepository;
+import com.example.developpezlebackendenutilisantjavaetspring.models.User;
+import com.example.developpezlebackendenutilisantjavaetspring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,8 +29,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .name(user.getName())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
+                .createdAt(user.getCreated_at())
+                .updatedAt(user.getUpdated_at())
                 .build();
     }
 }

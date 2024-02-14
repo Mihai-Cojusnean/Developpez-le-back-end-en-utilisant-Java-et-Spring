@@ -1,4 +1,4 @@
-package com.example.developpezlebackendenutilisantjavaetspring.exception;
+package com.example.developpezlebackendenutilisantjavaetspring.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

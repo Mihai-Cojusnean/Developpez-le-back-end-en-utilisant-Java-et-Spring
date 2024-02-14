@@ -1,6 +1,6 @@
-package com.example.developpezlebackendenutilisantjavaetspring.repository;
+package com.example.developpezlebackendenutilisantjavaetspring.repositories;
 
-import com.example.developpezlebackendenutilisantjavaetspring.model.User;
+import com.example.developpezlebackendenutilisantjavaetspring.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,9 +1,9 @@
-package com.example.developpezlebackendenutilisantjavaetspring.controller;
+package com.example.developpezlebackendenutilisantjavaetspring.controllers;
 
 import com.example.developpezlebackendenutilisantjavaetspring.dto.RentalDTO;
-import com.example.developpezlebackendenutilisantjavaetspring.model.Rental;
-import com.example.developpezlebackendenutilisantjavaetspring.response.RentalResponse;
-import com.example.developpezlebackendenutilisantjavaetspring.service.RentalService;
+import com.example.developpezlebackendenutilisantjavaetspring.models.Rental;
+import com.example.developpezlebackendenutilisantjavaetspring.responses.RentalResponse;
+import com.example.developpezlebackendenutilisantjavaetspring.services.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -54,7 +54,7 @@ public class RentalController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RentalResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)})
-    public ResponseEntity<Rental> saveRentals(Authentication authentication,@Valid RentalDTO rentalDTO) throws IOException {
+    public ResponseEntity<Rental> saveRentals(Authentication authentication, @Valid RentalDTO rentalDTO) throws IOException {
         return ResponseEntity.ok(rentalService.save(rentalDTO, authentication));
     }
 }

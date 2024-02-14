@@ -1,9 +1,9 @@
-package com.example.developpezlebackendenutilisantjavaetspring.controller;
+package com.example.developpezlebackendenutilisantjavaetspring.controllers;
 
 import com.example.developpezlebackendenutilisantjavaetspring.dto.MessageDTO;
-import com.example.developpezlebackendenutilisantjavaetspring.model.Message;
-import com.example.developpezlebackendenutilisantjavaetspring.response.MessageResponse;
-import com.example.developpezlebackendenutilisantjavaetspring.service.MessageService;
+import com.example.developpezlebackendenutilisantjavaetspring.models.Message;
+import com.example.developpezlebackendenutilisantjavaetspring.responses.MessageResponse;
+import com.example.developpezlebackendenutilisantjavaetspring.services.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

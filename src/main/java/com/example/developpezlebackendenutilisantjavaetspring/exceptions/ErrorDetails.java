@@ -1,4 +1,4 @@
-package com.example.developpezlebackendenutilisantjavaetspring.exception;
+package com.example.developpezlebackendenutilisantjavaetspring.exceptions;
 
 import lombok.Data;
 import org.springframework.validation.FieldError;
