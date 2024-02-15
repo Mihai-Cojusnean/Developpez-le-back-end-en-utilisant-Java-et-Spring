@@ -7,7 +7,3 @@ spring:
     username: root
     password: ${SQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-image:
-  base-url: "http://localhost:8075/images/"
-  local-url: "src/main/resources/static/images/"

@@ -1,7 +1,7 @@
 package com.example.developpezlebackendenutilisantjavaetspring.security;
 
-import com.example.developpezlebackendenutilisantjavaetspring.model.User;
-import com.example.developpezlebackendenutilisantjavaetspring.repository.UserRepository;
+import com.example.developpezlebackendenutilisantjavaetspring.models.User;
+import com.example.developpezlebackendenutilisantjavaetspring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
