@@ -1,5 +1,6 @@
 package com.example.developpezlebackendenutilisantjavaetspring.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -41,11 +42,14 @@ public class Rental {
     String description;
 
     @CreationTimestamp
-    LocalDateTime created_at;
+    @JsonProperty("created_at")
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
-    LocalDateTime updated_at;
+    @JsonProperty("updated_at")
+    LocalDateTime updatedAt;
 
     @NotNull
+    @JsonProperty("owner_id")
     Integer ownerId;
 }

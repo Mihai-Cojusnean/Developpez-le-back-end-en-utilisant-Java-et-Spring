@@ -1,5 +1,6 @@
 package com.example.developpezlebackendenutilisantjavaetspring.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -23,21 +24,27 @@ public class Message {
     Integer id;
 
     @NotNull
-    Integer user_id;
+    @JsonProperty("user_id")
+    Integer userId;
 
     @NotNull
-    Integer rental_id;
+    @JsonProperty("rental_id")
+    Integer rentalId;
 
     @NotEmpty
     String message;
 
     @CreationTimestamp
-    LocalDateTime created_at;
+    @JsonProperty("created_at")
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
-    LocalDateTime updated_at;
+    @JsonProperty("updated_at")
+    LocalDateTime updatedAt;
 
-    public Message(String message) {
+    public Message(Integer userId, Integer rentalId, String message) {
+        this.userId = userId;
+        this.rentalId = rentalId;
         this.message = message;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.developpezlebackendenutilisantjavaetspring.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -12,6 +13,8 @@ public class UserResponse {
     int id;
     String email;
     String name;
-    LocalDateTime created_at;
-    LocalDateTime updated_at;
+    @JsonProperty("created_at")
+    LocalDateTime createdAt;
+    @JsonProperty("updated_at")
+    LocalDateTime updatedAt;
 }

@@ -1,23 +1,26 @@
 package com.example.developpezlebackendenutilisantjavaetspring.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class MessageDTO {
-    @NotEmpty(message = "Message cannot be null")
-    String message;
+public class RentalUpdateDTO {
+    @NotEmpty
+    @Size(max = 50)
+    String name;
 
     @NotNull
-    @JsonProperty("user_id")
-    Integer userId;
+    Double surface;
 
     @NotNull
-    @JsonProperty("rental_id")
-    Integer rentalId;
+    Double price;
+
+    @NotEmpty
+    @Size(max = 2500)
+    String description;
 }

@@ -1,7 +1,6 @@
 package com.example.developpezlebackendenutilisantjavaetspring.controllers;
 
 import com.example.developpezlebackendenutilisantjavaetspring.dto.MessageDTO;
-import com.example.developpezlebackendenutilisantjavaetspring.models.Message;
 import com.example.developpezlebackendenutilisantjavaetspring.responses.MessageResponse;
 import com.example.developpezlebackendenutilisantjavaetspring.services.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,11 +8,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -32,9 +34,9 @@ public class MessageController {
                             schema = @Schema(implementation = MessageResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)})
-    public ResponseEntity<MessageResponse> create(@RequestBody MessageDTO messageDTO) {
-        messageService.save(messageDTO);
+    public ResponseEntity<MessageResponse> create(@Valid @RequestBody MessageDTO messageDTO, Principal principal) {
+        messageService.save(messageDTO, principal);
 
-        return ResponseEntity.ok(new MessageResponse(new Message("Message send with success")));
+        return ResponseEntity.ok(new MessageResponse("Message sent with success"));
     }
 }

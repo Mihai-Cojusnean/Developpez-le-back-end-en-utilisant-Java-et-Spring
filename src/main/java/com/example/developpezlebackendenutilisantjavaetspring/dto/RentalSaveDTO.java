@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RentalDTO {
+public class RentalSaveDTO {
     @NotEmpty
     @Size(max = 50)
     String name;

@@ -4,23 +4,22 @@ import com.example.developpezlebackendenutilisantjavaetspring.dto.MessageDTO;
 import com.example.developpezlebackendenutilisantjavaetspring.models.Message;
 import com.example.developpezlebackendenutilisantjavaetspring.repositories.MessageRepository;
 import com.example.developpezlebackendenutilisantjavaetspring.services.MessageService;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepo;
-    private final ModelMapper modelMapper;
 
-    public MessageServiceImpl(MessageRepository messageRepo, ModelMapper modelMapper) {
+    public MessageServiceImpl(MessageRepository messageRepo) {
         this.messageRepo = messageRepo;
-        this.modelMapper = modelMapper;
     }
 
-    public void save(MessageDTO messageDTO) {
-        Message message = new Message();
-
-        modelMapper.map(messageDTO, message);
-        messageRepo.save(message);
+    public void save(MessageDTO messageDTO, Principal principal) {
+        messageRepo.save(new Message(
+                messageDTO.getUserId(),
+                messageDTO.getRentalId(),
+                messageDTO.getMessage()));
     }
 }
