@@ -1,11 +1,12 @@
 package com.example.developpezlebackendenutilisantjavaetspring.controllers;
 
-import com.example.developpezlebackendenutilisantjavaetspring.dto.RentalSaveDTO;
-import com.example.developpezlebackendenutilisantjavaetspring.dto.RentalUpdateDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.SaveRentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.PutRentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.exceptions.ResourceNotFoundException;
 import com.example.developpezlebackendenutilisantjavaetspring.exceptions.UnauthorizedException;
-import com.example.developpezlebackendenutilisantjavaetspring.models.Rental;
 import com.example.developpezlebackendenutilisantjavaetspring.responses.MessageResponse;
-import com.example.developpezlebackendenutilisantjavaetspring.responses.RentalResponse;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.RentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.responses.RentalsResponse;
 import com.example.developpezlebackendenutilisantjavaetspring.services.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/rentals")
@@ -36,10 +38,10 @@ public class RentalController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of rentals retrieved successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RentalResponse.class))),
+                            schema = @Schema(implementation = RentalsResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)})
-    public ResponseEntity<RentalResponse> getRentals() {
-        return ResponseEntity.ok(new RentalResponse(rentalService.getAll()));
+    public ResponseEntity<RentalsResponse> getRentals() {
+        return ResponseEntity.ok(rentalService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -47,10 +49,16 @@ public class RentalController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rental retrieved successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RentalResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)})
-    public ResponseEntity<Rental> getRentalById(@PathVariable("id") int id) {
-        return ResponseEntity.ok(rentalService.getById(id));
+                            schema = @Schema(implementation = RentalsResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Rental not found", content = @Content)})
+    public ResponseEntity<RentalDTO> getRentalById(@PathVariable("id") int id) {
+        try {
+            RentalDTO rentalDTO = rentalService.getById(id);
+            return ResponseEntity.ok(rentalDTO);
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("")
@@ -58,12 +66,12 @@ public class RentalController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Rental created !",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RentalResponse.class))),
+                            schema = @Schema(implementation = RentalsResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)})
-    public ResponseEntity<MessageResponse> saveRentals(@Valid RentalSaveDTO rentalSaveDTO,
-                                                      HttpServletRequest request,
-                                                      Authentication authentication) throws IOException {
-        rentalService.save(rentalSaveDTO, authentication, request);
+    public ResponseEntity<MessageResponse> saveRentals(@Valid SaveRentalDTO saveRentalDTO,
+                                                       HttpServletRequest request,
+                                                       Authentication authentication) throws IOException {
+        rentalService.save(saveRentalDTO, authentication, request);
 
         return ResponseEntity.ok(new MessageResponse("Rental created !"));
     }
@@ -74,14 +82,17 @@ public class RentalController {
             @ApiResponse(responseCode = "200", description = "Rental updated !",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)})
-    public ResponseEntity<?> updateRental(@PathVariable("id") int id,
-                                          @Valid RentalUpdateDTO rentalUpdateDTO,
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Rental not found", content = @Content)})
+    public ResponseEntity<MessageResponse> updateRental(@PathVariable("id") int id,
+                                          @Valid PutRentalDTO putRentalDTO,
                                           Principal principal) {
         try {
-            rentalService.update(id, rentalUpdateDTO, principal);
+            rentalService.update(id, putRentalDTO, principal);
         } catch (UnauthorizedException ex) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (NoSuchElementException ex) {
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(new MessageResponse("Rental updated !"));
