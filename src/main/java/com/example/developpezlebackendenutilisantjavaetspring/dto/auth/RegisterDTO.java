@@ -1,4 +1,4 @@
-package com.example.developpezlebackendenutilisantjavaetspring.dto;
+package com.example.developpezlebackendenutilisantjavaetspring.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

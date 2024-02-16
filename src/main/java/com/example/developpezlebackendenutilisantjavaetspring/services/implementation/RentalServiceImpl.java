@@ -1,11 +1,14 @@
 package com.example.developpezlebackendenutilisantjavaetspring.services.implementation;
 
-import com.example.developpezlebackendenutilisantjavaetspring.dto.RentalSaveDTO;
-import com.example.developpezlebackendenutilisantjavaetspring.dto.RentalUpdateDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.SaveRentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.PutRentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.exceptions.ResourceNotFoundException;
 import com.example.developpezlebackendenutilisantjavaetspring.exceptions.UnauthorizedException;
 import com.example.developpezlebackendenutilisantjavaetspring.models.Rental;
-import com.example.developpezlebackendenutilisantjavaetspring.models.User;
 import com.example.developpezlebackendenutilisantjavaetspring.repositories.RentalRepository;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.RentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.responses.RentalsResponse;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.UserDTO;
 import com.example.developpezlebackendenutilisantjavaetspring.security.UserDetailsImpl;
 import com.example.developpezlebackendenutilisantjavaetspring.services.RentalService;
 import com.example.developpezlebackendenutilisantjavaetspring.services.UserService;
@@ -19,9 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -35,18 +36,18 @@ public class RentalServiceImpl implements RentalService {
         this.userService = userService;
     }
 
-    public void save(RentalSaveDTO rentalSaveDTO,
+    public void save(SaveRentalDTO saveRentalDTO,
                      Authentication authentication,
                      HttpServletRequest request) throws IOException {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        String imageUrl = saveImage(rentalSaveDTO, request);
+        String imageUrl = saveImage(saveRentalDTO, request);
 
-        rentalRepo.save(buildRental(rentalSaveDTO, userDetails.getId(), imageUrl));
+        rentalRepo.save(buildRental(saveRentalDTO, userDetails.getId(), imageUrl));
     }
 
-    private static String saveImage(RentalSaveDTO rentalSaveDTO, HttpServletRequest request) throws IOException {
-        MultipartFile file = rentalSaveDTO.getPicture();
+    private static String saveImage(SaveRentalDTO saveRentalDTO, HttpServletRequest request) throws IOException {
+        MultipartFile file = saveRentalDTO.getPicture();
         String fileName = file.getOriginalFilename();
         String filePath = request.getSession().getServletContext().getRealPath("/uploads/");
 
@@ -66,30 +67,35 @@ public class RentalServiceImpl implements RentalService {
                 relativePath);
     }
 
-    public void update(int rentalId, RentalUpdateDTO rentalUpdateDTO, Principal principal) {
-        User user = userService.getUserByEmail(principal.getName());
-        Optional<Rental> rental = rentalRepo.getById(rentalId);
-        if (rental.isPresent()) {
-            if (!Objects.equals(user.getId(), rental.get().getOwnerId())) {
-                throw new UnauthorizedException();
-            }
-            modelMapper.map(rentalUpdateDTO, rental.get());
-            rentalRepo.save(rental.get());
+    public void update(int rentalId, PutRentalDTO putRentalDTO, Principal principal) {
+        UserDTO user = userService.getUserByEmail(principal.getName());
+        Rental rental = rentalRepo.findById(rentalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found: " + rentalId));
+
+        if (!Objects.equals(user.getId(), rental.getOwnerId())) {
+            throw new UnauthorizedException();
         }
+        modelMapper.map(putRentalDTO, rental);
+        rentalRepo.save(rental);
     }
 
-    public Rental getById(Integer id) {
-        return rentalRepo.getById(id).orElseThrow(() -> new NoSuchElementException("Rental not found"));
+    @Override
+    public RentalsResponse getAll() {
+        List<Rental> rentalsResponse = rentalRepo.findAll();
+        return new RentalsResponse(rentalsResponse);
     }
 
-    public List<Rental> getAll() {
-        return rentalRepo.findAll();
+    public RentalDTO getById(Integer id) {
+        return rentalRepo.findById(id)
+                .map(rental -> modelMapper.map(rental, RentalDTO.class))
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found: " + id));
     }
 
-    private Rental buildRental(RentalSaveDTO rentalSaveDTO, int userId, String imageUrl) {
+
+    private Rental buildRental(SaveRentalDTO saveRentalDTO, int userId, String imageUrl) {
         Rental rental = new Rental();
 
-        modelMapper.map(rentalSaveDTO, rental);
+        modelMapper.map(saveRentalDTO, rental);
         rental.setOwnerId(userId);
         rental.setPicture(imageUrl);
 

@@ -1,50 +1,52 @@
 package com.example.developpezlebackendenutilisantjavaetspring.services;
 
-import com.example.developpezlebackendenutilisantjavaetspring.dto.RentalSaveDTO;
-import com.example.developpezlebackendenutilisantjavaetspring.dto.RentalUpdateDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.PutRentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.RentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.dto.rental.SaveRentalDTO;
+import com.example.developpezlebackendenutilisantjavaetspring.exceptions.ResourceNotFoundException;
 import com.example.developpezlebackendenutilisantjavaetspring.exceptions.UnauthorizedException;
-import com.example.developpezlebackendenutilisantjavaetspring.models.Rental;
+import com.example.developpezlebackendenutilisantjavaetspring.responses.RentalsResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
 
 public interface RentalService {
     /**
      * Saves a rental.
      *
-     * @param rentalSaveDTO  The rental data transfer object.
+     * @param saveRentalDTO  The rental data transfer object.
      * @param authentication The user's authentication context.
      * @throws IOException If there are issues related to input/output operations.
      */
-    void save(RentalSaveDTO rentalSaveDTO,
+    void save(SaveRentalDTO saveRentalDTO,
               Authentication authentication,
               HttpServletRequest request) throws IOException;
 
     /**
      * Updates a rental with the specified ID.
      *
-     * @param id               The ID of the rental to be updated.
-     * @param rentalUpdateDTO  The DTO containing the updated rental information.
-     * @param principal        Authenticated user details.
-     * @throws UnauthorizedException  If the user lacks necessary permissions.
+     * @param id           The ID of the rental to be updated.
+     * @param putRentalDTO The DTO containing the updated rental information.
+     * @param principal    Authenticated user details.
+     * @throws UnauthorizedException If the user lacks necessary permissions.
      */
-    void update(int id, RentalUpdateDTO rentalUpdateDTO, Principal principal) throws UnauthorizedException;
+    void update(int id, PutRentalDTO putRentalDTO, Principal principal);
 
     /**
      * Retrieves all rentals.
      *
      * @return A list containing all rentals.
      */
-    List<Rental> getAll();
+    RentalsResponse getAll();
 
     /**
-     * Retrieves a specific rental by its unique identifier.
+     * Retrieves a single {@link RentalDTO} object representing a rental entity based on its unique identifier.
      *
-     * @param id  The rental ID.
-     * @return  The {@link Rental} corresponding to the given ID.
+     * @param id The unique identifier of the rental to retrieve.
+     * @return A {@link RentalDTO} object representing the retrieved rental.
+     * @throws ResourceNotFoundException If the rental with the specified ID does not exist.
      */
-    Rental getById(Integer id);
+    RentalDTO getById(Integer id);
 }

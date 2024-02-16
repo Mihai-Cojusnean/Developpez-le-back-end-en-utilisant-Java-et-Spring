@@ -4,5 +4,5 @@ import com.example.developpezlebackendenutilisantjavaetspring.models.Rental;
 
 import java.util.List;
 
-public record RentalResponse(List<Rental> rentals) {
+public record RentalsResponse(List<Rental> rentals) {
 }

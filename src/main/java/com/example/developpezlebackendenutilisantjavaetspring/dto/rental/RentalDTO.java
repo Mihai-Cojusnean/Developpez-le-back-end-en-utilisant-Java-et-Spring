@@ -1,20 +1,22 @@
-package com.example.developpezlebackendenutilisantjavaetspring.responses;
+package com.example.developpezlebackendenutilisantjavaetspring.dto.rental;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    int id;
-    String email;
+public class RentalDTO {
+    Integer id;
     String name;
+    Double surface;
+    Double price;
+    String picture;
+    String description;
     @JsonProperty("created_at")
     LocalDateTime createdAt;
     @JsonProperty("updated_at")
     LocalDateTime updatedAt;
+    @JsonProperty("owner_id")
+    Integer ownerId;
 }
